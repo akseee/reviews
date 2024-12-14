@@ -1,0 +1,32 @@
+.table {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 4fr;
+  padding: 0.5rem 0;
+  color: black;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  background-color: rgb(0, 153, 255);
+}
+
+.sortable {
+  transition: all 0.3s ease-in-out;
+}
+.sortable:hover {
+  color: black;
+  cursor: pointer;
+}
+.rowContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.rowContainer tr:nth-child(odd) {
+  background-color: rgba(0, 153, 255, 0.1);
+}
