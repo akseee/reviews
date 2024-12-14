@@ -1,0 +1,8 @@
+.page {
+  max-width: 1280px;
+  min-height: 90vh;
+  margin: 0 auto;
+  padding: 0.5em 2em;
+  font-family: sans-serif;
+  text-align: center;
+}
