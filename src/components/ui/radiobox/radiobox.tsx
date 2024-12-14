@@ -1,4 +1,5 @@
 import { FC, ReactNode } from "react"
+import styles from "./radiobox.module.css"
 
 type RadioBoxProps = {
   name: string
@@ -16,7 +17,7 @@ export const RadioBox: FC<RadioBoxProps> = ({
   children,
 }) => {
   return (
-    <div key={value}>
+    <div key={value} className={styles.radiobox}>
       <input
         name={name}
         onChange={onChange}

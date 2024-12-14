@@ -7,18 +7,27 @@ import clsx from "clsx"
 //   platform: string
 //   ratingFrom: number
 //   ratingTo: number
-//   sortBy: string
+//   sortBy: object
 // }
 
 // const initialState: SetupFormProps = {
-//   platform: "",
+//   platform: "google",
 //   ratingFrom: 1,
 //   ratingTo: 5,
 //   sortBy: "newest",
 // }
 
+const sortMap = {
+  newest: "По времени (новые)",
+  oldest: "По времени (старые)",
+  ratingAsc: "По оценке (по возрастанию)",
+  ratingDesc: "По оценке (по убыванию)",
+}
+
 export const SetupForm = () => {
   const [selectedSort, setSelectedSort] = useState("newest")
+  const [selectedRating, setSelectedRating] = useState({ from: 1, to: 5 })
+  const [, setSelectedPlatform] = useState("yandex")
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -26,28 +35,6 @@ export const SetupForm = () => {
 
   const handleReset = (e) => {
     e.preventDefault()
-  }
-
-  const handleSelectChange = (e) => {
-    console.log(e.target.value)
-  }
-
-  const handleRatingChange = (e) => {
-    if (e.target.name === "ratingFrom") {
-      console.log("ratingFrom")
-      console.log(e.target.value)
-    }
-    if (e.target.name === "ratingTo") {
-      console.log("ratingTo")
-      console.log(e.target.value)
-    }
-  }
-
-  const sortMap = {
-    newest: "По времени (новые)",
-    oldest: "По времени (старые)",
-    ratingAsc: "По оценке (по возрастанию)",
-    ratingDesc: "По оценке (по убыванию)",
   }
 
   return (
@@ -58,7 +45,9 @@ export const SetupForm = () => {
           <label className={styles.platform}>
             <span>по платформе</span>
             <select
-              onChange={handleSelectChange}
+              onChange={(e) => {
+                setSelectedPlatform(e.target.value)
+              }}
               name="platform"
               className={styles.square}
             >
@@ -70,23 +59,33 @@ export const SetupForm = () => {
           <label className={styles.score}>
             <span>по оценкам</span>
             <input
-              onChange={handleRatingChange}
+              onChange={(e) => {
+                setSelectedRating({
+                  ...selectedRating,
+                  from: Number(e.target.value),
+                })
+              }}
               className={styles.square}
               type="number"
               name="ratingFrom"
               placeholder="рейтинг от"
               min="1"
-              max="5"
+              max={selectedRating.to}
               step="1"
             />
 
             <input
-              onChange={handleRatingChange}
+              onChange={(e) => {
+                setSelectedRating({
+                  ...selectedRating,
+                  to: Number(e.target.value),
+                })
+              }}
               className={styles.square}
               type="number"
               name="ratingTo"
               placeholder="рейтинг до"
-              min="1"
+              min={selectedRating.from}
               max="5"
               step="1"
             />
@@ -95,7 +94,6 @@ export const SetupForm = () => {
 
         <fieldset className={styles.sort}>
           <legend className={styles.title}>Сортировка</legend>
-
           {Object.entries(sortMap).map(([key, label]) => {
             return (
               <RadioBox
