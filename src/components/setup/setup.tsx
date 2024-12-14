@@ -1,14 +1,53 @@
-import { SyntheticEvent } from "react"
+import { useState } from "react"
+import { RadioBox } from "../ui/radiobox/radiobox"
 import styles from "./setup.module.css"
 import clsx from "clsx"
 
-export const Setup = () => {
-  const handleSubmit = (e: SyntheticEvent) => {
-    console.log(e)
+// type SetupFormProps = {
+//   platform: string
+//   ratingFrom: number
+//   ratingTo: number
+//   sortBy: string
+// }
+
+// const initialState: SetupFormProps = {
+//   platform: "",
+//   ratingFrom: 1,
+//   ratingTo: 5,
+//   sortBy: "newest",
+// }
+
+export const SetupForm = () => {
+  const [selectedSort, setSelectedSort] = useState("newest")
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
   }
 
-  const handleReset = (e: SyntheticEvent) => {
-    console.log(e)
+  const handleReset = (e) => {
+    e.preventDefault()
+  }
+
+  const handleSelectChange = (e) => {
+    console.log(e.target.value)
+  }
+
+  const handleRatingChange = (e) => {
+    if (e.target.name === "ratingFrom") {
+      console.log("ratingFrom")
+      console.log(e.target.value)
+    }
+    if (e.target.name === "ratingTo") {
+      console.log("ratingTo")
+      console.log(e.target.value)
+    }
+  }
+
+  const sortMap = {
+    newest: "По времени (новые)",
+    oldest: "По времени (старые)",
+    ratingAsc: "По оценке (по возрастанию)",
+    ratingDesc: "По оценке (по убыванию)",
   }
 
   return (
@@ -18,7 +57,11 @@ export const Setup = () => {
           <legend className={styles.title}>Фильтрация</legend>
           <label className={styles.platform}>
             <span>по платформе</span>
-            <select name="platform" className={styles.square}>
+            <select
+              onChange={handleSelectChange}
+              name="platform"
+              className={styles.square}
+            >
               <option value="google">Google</option>
               <option value="yandex">Яндекс</option>
               <option value="2gis">2ГИС</option>
@@ -27,6 +70,7 @@ export const Setup = () => {
           <label className={styles.score}>
             <span>по оценкам</span>
             <input
+              onChange={handleRatingChange}
               className={styles.square}
               type="number"
               name="ratingFrom"
@@ -34,10 +78,10 @@ export const Setup = () => {
               min="1"
               max="5"
               step="1"
-              value={1}
             />
 
             <input
+              onChange={handleRatingChange}
               className={styles.square}
               type="number"
               name="ratingTo"
@@ -45,34 +89,27 @@ export const Setup = () => {
               min="1"
               max="5"
               step="1"
-              value={5}
             />
           </label>
         </fieldset>
 
         <fieldset className={styles.sort}>
           <legend className={styles.title}>Сортировка</legend>
-          <div>
-            <input type="radio" name="sort" id="newest" value="newest" />
-            <label htmlFor="newest"> По времени (новые)</label>
-          </div>
-          <div>
-            <input type="radio" name="sort" value="oldest" id="oldest" />
-            <label htmlFor="oldest"> По времени (старые) </label>
-          </div>
-          <div>
-            <input type="radio" name="sort" value="ratingAsc" id="ratingAsc" />
-            <label htmlFor="ratingAsc"> По оценке (по возрастанию)</label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              name="sort"
-              value="ratingDesc"
-              id="ratingDesc"
-            />
-            <label htmlFor="ratingDesc"> По оценке (по убыванию)</label>
-          </div>
+
+          {Object.entries(sortMap).map(([key, label]) => {
+            return (
+              <RadioBox
+                name={key}
+                value={key}
+                checked={selectedSort === key}
+                onChange={() => {
+                  setSelectedSort(key)
+                }}
+              >
+                {label}
+              </RadioBox>
+            )
+          })}
         </fieldset>
 
         <div className={styles.buttons}>
