@@ -1,53 +1,74 @@
 import { useState } from "react"
-import { RadioBox } from "../ui/radiobox/radiobox"
-import styles from "./setup.module.css"
 import clsx from "clsx"
 
-// type SetupFormProps = {
-//   platform: string
-//   ratingFrom: number
-//   ratingTo: number
-//   sortBy: object
-// }
+import styles from "./setup.module.css"
+import { initialStateForm, sortMap } from "../../utils/constants"
 
-// const initialState: SetupFormProps = {
-//   platform: "google",
-//   ratingFrom: 1,
-//   ratingTo: 5,
-//   sortBy: "newest",
-// }
+import { useDispatch, useSelector } from "../../services/store"
+import {
+  resetFormData,
+  setFormData,
+} from "../../services/slices/setupFormReducer"
 
-const sortMap = {
-  newest: "По времени (новые)",
-  oldest: "По времени (старые)",
-  ratingAsc: "По оценке (по возрастанию)",
-  ratingDesc: "По оценке (по убыванию)",
-}
+import { RadioBox } from "../ui/radiobox/radiobox"
 
 export const SetupForm = () => {
-  const [selectedSort, setSelectedSort] = useState("newest")
-  const [selectedRating, setSelectedRating] = useState({ from: 1, to: 5 })
-  const [, setSelectedPlatform] = useState("yandex")
+  const dispatch = useDispatch()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const { platform, ratingFrom, ratingTo, sortBy } = useSelector(
+    (state) => state.form.formData
+  )
+
+  const [setupData, setSetupData] = useState<initialStateForm>({
+    platform: platform,
+    ratingFrom: ratingFrom,
+    ratingTo: ratingTo,
+    sortBy: sortBy,
+  })
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target
+
+    const newValue = name.includes("rating") ? parseInt(value, 10) : value
+
+    setSetupData((prevData) => ({
+      ...prevData,
+      [name]: newValue,
+    }))
   }
 
-  const handleReset = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    dispatch(setFormData(setupData))
+  }
+
+  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    dispatch(resetFormData())
+    setSetupData({
+      platform: "google",
+      ratingFrom: 1,
+      ratingTo: 5,
+      sortBy: "newest",
+    })
   }
 
   return (
     <div className={clsx(styles.container)}>
-      <form className={styles.form}>
+      <form
+        className={styles.form}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+      >
         <fieldset className={styles.filer}>
           <legend className={styles.title}>Фильтрация</legend>
           <label className={styles.platform}>
             <span>по платформе</span>
             <select
-              onChange={(e) => {
-                setSelectedPlatform(e.target.value)
-              }}
+              value={setupData.platform}
+              onChange={handleChange}
               name="platform"
               className={styles.square}
             >
@@ -59,33 +80,25 @@ export const SetupForm = () => {
           <label className={styles.score}>
             <span>по оценкам</span>
             <input
-              onChange={(e) => {
-                setSelectedRating({
-                  ...selectedRating,
-                  from: Number(e.target.value),
-                })
-              }}
+              value={setupData.ratingFrom}
+              onChange={handleChange}
               className={styles.square}
               type="number"
               name="ratingFrom"
               placeholder="рейтинг от"
               min="1"
-              max={selectedRating.to}
+              max={setupData.ratingTo}
               step="1"
             />
 
             <input
-              onChange={(e) => {
-                setSelectedRating({
-                  ...selectedRating,
-                  to: Number(e.target.value),
-                })
-              }}
+              value={setupData.ratingTo}
+              onChange={handleChange}
               className={styles.square}
               type="number"
               name="ratingTo"
               placeholder="рейтинг до"
-              min={selectedRating.from}
+              min={setupData.ratingFrom}
               max="5"
               step="1"
             />
@@ -94,15 +107,14 @@ export const SetupForm = () => {
 
         <fieldset className={styles.sort}>
           <legend className={styles.title}>Сортировка</legend>
-          {Object.entries(sortMap).map(([key, label]) => {
+          {Object.entries(sortMap).map(([key, label], index) => {
             return (
               <RadioBox
-                name={key}
+                key={index}
+                name={"sortBy"}
                 value={key}
-                checked={selectedSort === key}
-                onChange={() => {
-                  setSelectedSort(key)
-                }}
+                checked={setupData.sortBy === key}
+                onChange={handleChange}
               >
                 {label}
               </RadioBox>
@@ -111,18 +123,10 @@ export const SetupForm = () => {
         </fieldset>
 
         <div className={styles.buttons}>
-          <button
-            className={clsx(styles.submit, styles.button)}
-            type="submit"
-            onClick={handleSubmit}
-          >
+          <button className={clsx(styles.submit, styles.button)} type="submit">
             Подтвердить
           </button>
-          <button
-            className={clsx(styles.reset, styles.button)}
-            type="reset"
-            onClick={handleReset}
-          >
+          <button className={clsx(styles.reset, styles.button)} type="reset">
             Очистить
           </button>
         </div>

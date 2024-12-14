@@ -68,6 +68,15 @@
 
 .button:hover {
   opacity: 1;
-  transform: scale(0.9);
   cursor: pointer;
+}
+
+.submit:active {
+  background-color: rgba(0, 255, 0, 0.4);
+  transform: scale(0.9);
+}
+
+.reset:active {
+  background-color: rgba(255, 0, 0, 0.3);
+  transform: scale(0.9);
 }

@@ -5,23 +5,14 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook,
 } from "react-redux"
-// import * as burgerApi from '@api';
-// import { userSlice } from './slices/user';
-// import { ingredientsSlice } from './slices/ingredients';
-// import { orderSlice } from './slices/order';
-// import { feedSlice } from './slices/feed';
-// import { burgerConstructor } from './slices/burgerConstructor';
+import setupFormReducer from "./slices/setupFormReducer"
 
-export const rootReducer = combineReducers({})
+export const rootReducer = combineReducers({
+  form: setupFormReducer,
+})
 
 const store = configureStore({
   reducer: rootReducer,
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     thunk: {
-  //       extraArgument: burgerApi
-  //     }
-  //   }),
 })
 
 export type RootState = ReturnType<typeof rootReducer>

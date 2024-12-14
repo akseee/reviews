@@ -4,7 +4,7 @@ import * as ReactDOMClient from "react-dom/client"
 import "./index.css"
 import { Provider } from "react-redux"
 import store from "./services/store.ts"
-import App from "./components/app/App.tsx"
+import App from "./components/app/app.tsx"
 
 const container = document.getElementById("root") as HTMLElement
 const root = ReactDOMClient.createRoot(container!)
