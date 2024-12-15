@@ -1,50 +1,43 @@
-# React + TypeScript + Vite
+# Интерактивная платформа с отзывами
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Стек**: React + TypeScript + Redux Toolkit
 
-Currently, two official plugins are available:
+#### Интерактивная платформа с отзывами
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Это одностраничное приложение, с ипользованием React (функциональные компоненты с хуками), Redux и redux-saga (управление состоянием отзывов, фильтрацией и сортировĸой), вся логиĸа на фронте (фильтрация и сортировĸа выполняются на ĸлиентсĸой стороне) c понятной струĸтурой проеĸта.
 
-## Expanding the ESLint configuration
+**Приложение позволяет**:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Загружать список отзывов для одной компании через redux-saga .
+2. Фильтровать отзывы:
+   По платформе (Google, Яндекс, 2ГИС).
+   По диапазону оценок (рейтинг от и до).
+3. Сортировать отзывы:
+   По времени (новые/старые).
+   По оценке (по возрастанию/убыванию).
+4. Отображать отфильтрованный и отсортированный список в табличной форме.
 
-- Configure the top-level `parserOptions` property like this:
+#### Функциональность
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Отображение таблицы отзывов с колонками:
+   - Платформа.
+   - Рейтинг.
+   - Время добавления.
+   - Текст отзыва.
+2. Встроенные фильтры и сортировки, которые применяются без перезагрузки страницы.
+
+#### Запуск проекта
+
 ```
+npm clone git@github.com:akseee/reviews.git
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+npm cd reviews
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+npm install
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+npm run build
+
+npm run dev
+
+
 ```
