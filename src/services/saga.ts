@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects"
-import { Review, setReviews } from "./reviewSlice"
+import { Review } from "../utils/constants"
+import { setReviews } from "./reviewSlice"
 
 const fetchReviews = async () => {
   const response = await fetch("/reviews.json")
