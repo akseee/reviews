@@ -1,12 +1,41 @@
 import styles from "./table.module.css"
 import { Row } from "./row"
-import { RootState, useSelector } from "../../services/store"
+import { RootState, useDispatch, useSelector } from "../../services/store"
+import { applySettings, setFormData } from "../../services/reviewSlice"
 
 export const Table = () => {
+  const dispatch = useDispatch()
+
   const reviews = useSelector((state: RootState) => state.form.reviews)
+  const formData = useSelector((state: RootState) => state.form.formData)
 
   const handleSort = (type: string) => {
-    console.log("sorting by ", type)
+    if (type !== "platform") {
+      let currentSort = formData.sortBy
+
+      if (type === "rating") {
+        currentSort = currentSort === "ratingAsc" ? "ratingDesc" : "ratingAsc"
+      } else if (type === "date") {
+        currentSort = currentSort === "newest" ? "oldest" : "newest"
+      }
+      dispatch(setFormData({ ...formData, sortBy: currentSort }))
+    }
+
+    if (type === "platform") {
+      console.log(type)
+      let currentPlatform = formData.platform
+      currentPlatform =
+        currentPlatform === "any"
+          ? "yandex"
+          : currentPlatform === "yandex"
+          ? "google"
+          : currentPlatform === "google"
+          ? "2gis"
+          : "any"
+      dispatch(setFormData({ ...formData, platform: currentPlatform }))
+    }
+
+    dispatch(applySettings())
   }
 
   return (

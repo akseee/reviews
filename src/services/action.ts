@@ -1,1 +1,1 @@
-export const loadReviews = () => ({ type: "form/loadReviews" })
+export const loadReviews = () => ({ type: "reviews/loadReviews" })

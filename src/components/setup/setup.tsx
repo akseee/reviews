@@ -31,7 +31,6 @@ export const SetupForm = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
-
     const newValue = name.includes("rating") ? parseInt(value, 10) : value
 
     setSetupData((prevData) => ({
@@ -41,6 +40,7 @@ export const SetupForm = () => {
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(setupData, "from component")
     e.preventDefault()
     dispatch(setFormData(setupData))
     dispatch(applySettings())

@@ -1,18 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { platformMap, Platforms, Review, SortBy } from "../utils/constants"
 
-interface Review {
-  id: number
-  platform: string
-  rating: number
-  date: string
-  text: string
-}
-
-interface FormData {
-  platform: string
+export interface FormData {
+  platform: Platforms
   ratingFrom: number
   ratingTo: number
-  sortBy: string
+  sortBy: SortBy | ""
 }
 
 interface State {
@@ -51,7 +44,34 @@ const reviewSlice = createSlice({
 
     applySettings(state) {
       const { platform, ratingFrom, ratingTo, sortBy } = state.formData
-      console.log(platform, ratingFrom, ratingTo, sortBy)
+
+      let filteredReviews = [...state.originalReviews]
+
+      if (platform !== "any") {
+        filteredReviews = filteredReviews.filter(
+          (review) => review.platform === platformMap[platform]
+        )
+      }
+
+      filteredReviews = filteredReviews.filter(
+        (review) => review.rating >= ratingFrom && review.rating <= ratingTo
+      )
+
+      state.reviews = filteredReviews
+
+      if (sortBy === "newest") {
+        state.reviews.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+      } else if (sortBy === "oldest") {
+        state.reviews.sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        )
+      } else if (sortBy === "ratingAsc") {
+        state.reviews.sort((a, b) => a.rating - b.rating)
+      } else if (sortBy === "ratingDesc") {
+        state.reviews.sort((a, b) => b.rating - a.rating)
+      }
     },
   },
 })
