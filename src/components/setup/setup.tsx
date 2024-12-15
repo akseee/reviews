@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "../../services/store"
 import {
   resetFormData,
   setFormData,
-} from "../../services/slices/setupFormReducer"
+  applySettings,
+} from "../../services/reviewSlice"
 
 import { RadioBox } from "../ui/radiobox/radiobox"
 
@@ -42,17 +43,19 @@ export const SetupForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(setFormData(setupData))
+    dispatch(applySettings())
   }
 
   const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(resetFormData())
     setSetupData({
-      platform: "google",
+      platform: "any",
       ratingFrom: 1,
       ratingTo: 5,
-      sortBy: "newest",
+      sortBy: "",
     })
+    dispatch(applySettings())
   }
 
   return (
@@ -72,6 +75,7 @@ export const SetupForm = () => {
               name="platform"
               className={styles.square}
             >
+              <option value="any">Все</option>
               <option value="google">Google</option>
               <option value="yandex">Яндекс</option>
               <option value="2gis">2ГИС</option>

@@ -14,7 +14,7 @@ type RowProps = {
 
 export const Row: FC<RowProps> = ({ data }) => {
   return (
-    <tr key={data.id} className={styles.row}>
+    <tr className={styles.row}>
       <td className={styles.platform}>{data.platform}</td>
       <td
         className={clsx(

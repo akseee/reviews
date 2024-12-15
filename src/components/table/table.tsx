@@ -1,14 +1,14 @@
-import { useState } from "react"
-import { reviews } from "../../utils/reviews"
 import styles from "./table.module.css"
 import { Row } from "./row"
+import { RootState, useSelector } from "../../services/store"
 
 export const Table = () => {
-  const [data] = useState(reviews)
+  const reviews = useSelector((state: RootState) => state.form.reviews)
 
   const handleSort = (type: string) => {
-    console.log(type)
+    console.log("sorting by ", type)
   }
+
   return (
     <table className={styles.table}>
       <thead>
@@ -29,8 +29,8 @@ export const Table = () => {
         </tr>
       </thead>
       <tbody className={styles.rowContainer}>
-        {data.map((item) => {
-          return <Row data={item} />
+        {reviews.map((item, index) => {
+          return <Row data={item} key={index} />
         })}
       </tbody>
     </table>
